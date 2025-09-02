@@ -1,0 +1,78 @@
+@startuml
+
+class Suit21Game {
+    -ArrayList<Player> players
+    -ArrayList<Player> playerOrder
+    -Deck deck
+    -int numberOfGames
+    +Suit21Game(int numberOfPlayers, int numberOfGames)
+    +void startGame()
+    +void playRounds(Replay replay)
+    +void awardPoints()
+    +void resetPlayerOrder()
+}
+
+class Player {
+    -String name
+    -ArrayList<Card> hand
+    -double points
+    -String lastDecision
+    +Player(String name)
+    +void addCard(Card card)
+    +void clearHand()
+    +void displayHand()
+    +void swapCard(Card newCard, int index)
+    +int calculateMaxScore()
+    +void displaySuitScores()
+    +String getLastDecision()
+    +void setLastDecision(String decision)
+}
+
+class ComputerPlayer {
+    -Card replacedCard
+    +ComputerPlayer(String name)
+    +void swapCard(Card newCard, int index)
+    +Card getReplacedCard()
+    +int findLowestValueCardIndex() // Helper method for swapping
+}
+
+class Deck {
+    -ArrayList<Card> cards
+    +Deck()
+    +void shuffle()
+    +Card dealCard()
+    +int cardsRemaining()
+}
+
+class Card {
+    -int rank
+    -String suit
+    +static String[] ranks
+    +static String[] suits
+    +Card(int rank, String suit)
+    +String getRank()
+    +String getSuit()
+    +int getRankValue()
+    +int getAlternativeAceValue()
+    +String getColour()
+    +boolean isBiggerThan(Card anotherCard)
+    +String toString()
+    +int compareTo(Card otherCard)
+}
+
+class Replay {
+    -ArrayList<String> roundLogs
+    -int totalRounds
+    +Replay()
+    +void logRound(int roundNumber, ArrayList<Player> players)
+    +void displayReplay()
+}
+
+Suit21Game "1" *-- "0..*   " Player : manages >
+Suit21Game "1 " *-- "1 " Deck : uses >
+Player "1   " <|-- "1" ComputerPlayer : inherits >
+Player "1" *-- "0..*   " Card : holds >
+Replay "1   " *-- "0..*" Player : logs >
+Replay "1 " *-- "0..* " Card : tracks >
+
+@enduml
